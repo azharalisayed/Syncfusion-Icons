@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syncfusion Icons — Advanced Search</title>
+<link href="https://cdn.syncfusion.com/ej2/32.2.3/ej2-icons/styles/material3.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --border: #2a2a3a;
+    --border-hi: #3d3d55;
+    --accent: #7c6ff7;
+    --accent2: #a78bfa;
+    --accent3: #c4b5fd;
+    --text: #e8e6ff;
+    --text2: #9a97bb;
+    --text3: #5a5775;
+    --success: #4ade80;
+    --warn: #fb923c;
+    --card: #13131e;
+    --card-hi: #1c1c2e;
+    --glow: rgba(124, 111, 247, 0.15);
+    --glow2: rgba(124, 111, 247, 0.06);
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,10,15,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(16px, 4vw, 48px);
+  }
+
+  .header-inner {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 72px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    box-shadow: 0 0 20px var(--glow);
+  }
+
+  .logo-text {
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .logo-text span {
+    color: var(--accent2);
+  }
+
+  .version-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  /* ── SEARCH BAR ── */
+  .search-wrap {
+    flex: 1;
+    position: relative;
+    max-width: 560px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 14px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent2);
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  #mainSearch {
+    width: 100%;
+    background: var(--bg3);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    padding: 10px 44px 10px 44px;
+    border-radius: var(--radius);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  #mainSearch:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--glow);
+  }
+
+  #mainSearch::placeholder { color: var(--text3); }
+
+  .search-clear {
+    position: absolute;
+    right: 12px; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    border-radius: 4px;
+    display: none;
+    transition: color 0.15s;
+  }
+  .search-clear:hover { color: var(--text); }
+  .search-clear.visible { display: flex; }
+
+  /* keyboard shortcut badge */
+  .search-kbd {
+    position: absolute;
+    right: 12px; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    border-radius: 4px;
+    pointer-events: none;
+  }
+
+  /* ── HEADER STATS ── */
+  .header-stats {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--accent2);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: clamp(16px, 3vw, 32px) clamp(16px, 4vw, 48px);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── CONTROLS BAR ── */
+  .controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .controls-left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex: 1;
+    flex-wrap: wrap;
+  }
+
+  .controls-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  /* Filter chips */
+  .filter-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  .chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .chip:hover {
+    border-color: var(--border-hi);
+    color: var(--text);
+  }
+
+  .chip.active {
+    background: rgba(124,111,247,0.15);
+    border-color: var(--accent);
+    color: var(--accent3);
+  }
+
+  /* Size toggle */
+  .size-group {
+    display: flex;
+    gap: 4px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 3px;
+  }
+
+  .size-btn {
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    transition: all 0.15s;
+  }
+
+  .size-btn.active {
+    background: var(--border-hi);
+    color: var(--text);
+  }
+
+  .size-btn:hover:not(.active) {
+    color: var(--text2);
+  }
+
+  /* Sort select */
+  .sort-select {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 6px 28px 6px 10px;
+    border-radius: var(--radius-sm);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath fill='%235a5775' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    transition: border-color 0.15s;
+  }
+  .sort-select:focus { border-color: var(--accent); }
+
+  /* Result count */
+  .result-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text3);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .result-count strong {
+    color: var(--accent2);
+    font-weight: 500;
+  }
+
+  /* ── CATEGORY SIDEBAR + GRID LAYOUT ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: sticky;
+    top: 90px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .sidebar-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .sidebar-clear {
+    background: none;
+    border: none;
+    color: var(--accent2);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .sidebar-clear:hover { background: var(--glow2); }
+
+  .cat-list {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+    padding: 8px 0;
+  }
+
+  .cat-list::-webkit-scrollbar { width: 4px; }
+  .cat-list::-webkit-scrollbar-track { background: transparent; }
+  .cat-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .cat-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: background 0.12s;
+    gap: 8px;
+  }
+
+  .cat-item:hover { background: var(--bg3); }
+  .cat-item.active { background: rgba(124,111,247,0.1); }
+
+  .cat-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .cat-name {
+    font-size: 13px;
+    color: var(--text2);
+    flex: 1;
+    transition: color 0.12s;
+  }
+
+  .cat-item.active .cat-name,
+  .cat-item:hover .cat-name { color: var(--text); }
+
+  .cat-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text3);
+    background: var(--bg3);
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  .cat-item.active .cat-count {
+    background: rgba(124,111,247,0.2);
+    color: var(--accent3);
+  }
+
+  /* ── ICONS GRID ── */
+  .grid-area {}
+
+  #iconGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--col-min, 88px), 1fr));
+    gap: 8px;
+    transition: all 0.15s;
+  }
+
+  #iconGrid.size-sm { --col-min: 72px; }
+  #iconGrid.size-md { --col-min: 96px; }
+  #iconGrid.size-lg { --col-min: 130px; }
+
+  .icon-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 8px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.12s, box-shadow 0.15s;
+    position: relative;
+    user-select: none;
+  }
+
+  .icon-card:hover {
+    border-color: var(--accent);
+    background: var(--card-hi);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 0 1px var(--accent);
+    z-index: 2;
+  }
+
+  .icon-card.copied {
+    border-color: var(--success);
+    background: rgba(74,222,128,0.06);
+    animation: popCopy 0.4s ease;
+  }
+
+  @keyframes popCopy {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.08) translateY(-3px); }
+    100% { transform: scale(1) translateY(-2px); }
+  }
+
+  .icon-card .e-icons {
+    font-size: 22px;
+    color: var(--text2);
+    transition: color 0.15s;
+    line-height: 1;
+  }
+
+  #iconGrid.size-sm .icon-card .e-icons { font-size: 18px; }
+  #iconGrid.size-lg .icon-card .e-icons { font-size: 28px; }
+
+  .icon-card:hover .e-icons { color: var(--accent3); }
+  .icon-card.copied .e-icons { color: var(--success); }
+
+  .icon-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text3);
+    text-align: center;
+    word-break: break-all;
+    line-height: 1.3;
+    transition: color 0.15s;
+    max-width: 100%;
+  }
+
+  #iconGrid.size-lg .icon-name { font-size: 10px; }
+
+  .icon-card:hover .icon-name { color: var(--text2); }
+  .icon-card.copied .icon-name { color: var(--success); }
+
+  /* Copy flash tag */
+  .copy-tag {
+    position: absolute;
+    top: 5px; right: 5px;
+    background: var(--success);
+    color: #000;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    font-weight: 500;
+    padding: 2px 5px;
+    border-radius: 3px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.15s, transform 0.15s;
+  }
+
+  .icon-card.copied .copy-tag {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    grid-column: 1/-1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    gap: 16px;
+    color: var(--text3);
+  }
+
+  .empty-icon {
+    font-size: 48px;
+    opacity: 0.3;
+  }
+
+  .empty-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text2);
+  }
+
+  .empty-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--card-hi);
+    border: 1px solid var(--border-hi);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 10px 20px;
+    border-radius: var(--radius);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  #toast .toast-icon {
+    color: var(--success);
+    font-size: 16px;
+  }
+
+  /* ── DETAIL PANEL ── */
+  #detailPanel {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    padding: 20px clamp(16px, 4vw, 48px);
+    z-index: 200;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    backdrop-filter: blur(20px);
+  }
+
+  #detailPanel.open {
+    transform: translateY(0);
+  }
+
+  .detail-preview {
+    width: 64px; height: 64px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .detail-preview .e-icons {
+    font-size: 32px;
+    color: var(--accent2);
+  }
+
+  .detail-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .detail-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .detail-class {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text3);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    display: inline-block;
+  }
+
+  .detail-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  .detail-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .detail-btn:hover {
+    border-color: var(--accent);
+    color: var(--text);
+    background: rgba(124,111,247,0.1);
+  }
+
+  .detail-btn.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .detail-btn.primary:hover {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    box-shadow: 0 0 16px var(--glow);
+  }
+
+  .detail-close {
+    background: none;
+    border: none;
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 6px;
+    transition: color 0.15s;
+    flex-shrink: 0;
+    display: flex;
+  }
+
+  .detail-close:hover { color: var(--text); }
+
+  /* ── SIZE PREVIEWS IN PANEL ── */
+  .detail-sizes {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  .sz-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .sz-item .e-icons { color: var(--text2); }
+  .sz-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--text3);
+  }
+
+  /* ── LOAD MORE ── */
+  .load-more-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+  }
+
+  #loadMoreBtn {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 10px 28px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg3);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  #loadMoreBtn:hover {
+    border-color: var(--accent);
+    color: var(--text);
+    background: rgba(124,111,247,0.08);
+  }
+
+  #loadMoreBtn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  /* scrollbar global */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-hi); }
+
+  /* animations */
+  .icon-card {
+    animation: fadeIn 0.2s ease both;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* responsive */
+  @media (max-width: 640px) {
+    .header-stats { display: none; }
+    .version-badge { display: none; }
+    .logo-text { display: none; }
+    #iconGrid { --col-min: 76px; }
+    .detail-sizes { display: none; }
+    .controls-right { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">
+        <span class="e-icons e-iconsets" style="color:#fff;font-size:18px"></span>
+      </div>
+      <div class="logo-text">Syncfusion <span>Icons</span></div>
+      <div class="version-badge">v32.2.3 · material3</div>
+    </div>
+
+    <div class="search-wrap">
+      <span class="e-icons e-search search-icon"></span>
+      <input id="mainSearch" type="text" placeholder="Search 608 icons..." autocomplete="off" spellcheck="false">
+      <button class="search-clear" id="searchClear" title="Clear">
+        <span class="e-icons e-close"></span>
+      </button>
+      <div class="search-kbd" id="searchKbd">⌘K</div>
+    </div>
+
+    <div class="header-stats">
+      <div class="stat">
+        <div class="stat-num" id="statTotal">608</div>
+        <div class="stat-label">Total</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-num" id="statShown">608</div>
+        <div class="stat-label">Shown</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-num" id="statCopied">0</div>
+        <div class="stat-label">Copied</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ── MAIN ── -->
+<div class="main">
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="controls-left">
+      <span class="filter-label">Filter:</span>
+      <div class="chips" id="filterChips">
+        <div class="chip active" data-filter="all">All</div>
+        <div class="chip" data-filter="chart">Charts</div>
+        <div class="chip" data-filter="table">Tables</div>
+        <div class="chip" data-filter="arrow|chevron">Navigation</div>
+        <div class="chip" data-filter="^e-border">Borders</div>
+        <div class="chip" data-filter="^e-frame">Frames</div>
+        <div class="chip" data-filter="^e-export|^e-import">Export/Import</div>
+        <div class="chip" data-filter="edit|format|paint|style">Editing</div>
+        <div class="chip" data-filter="filter|sort">Filter/Sort</div>
+        <div class="chip" data-filter="text|font|para">Text</div>
+        <div class="chip" data-filter="check|tick|circle|warning|info">Status</div>
+        <div class="chip" data-filter="page|margin|size|column|break">Page</div>
+        <div class="chip" data-filter="^e-timeline">Timeline</div>
+        <div class="chip" data-filter="zoom|fit|resize|full">View</div>
+      </div>
+    </div>
+
+    <div class="controls-right">
+      <select class="sort-select" id="sortSelect">
+        <option value="az">A → Z</option>
+        <option value="za">Z → A</option>
+        <option value="len">By length</option>
+      </select>
+      <div class="size-group">
+        <button class="size-btn" data-size="sm">SM</button>
+        <button class="size-btn active" data-size="md">MD</button>
+        <button class="size-btn" data-size="lg">LG</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid + Sidebar -->
+  <div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span>Categories</span>
+        <button class="sidebar-clear" id="catClear">Clear</button>
+      </div>
+      <div class="cat-list" id="catList"></div>
+    </aside>
+
+    <!-- Icons Grid -->
+    <div class="grid-area">
+      <div id="iconGrid" class="size-md"></div>
+      <div class="load-more-wrap">
+        <button id="loadMoreBtn">Load more icons</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── DETAIL PANEL ── -->
+<div id="detailPanel">
+  <div class="detail-preview">
+    <span class="e-icons" id="detailIconEl"></span>
+  </div>
+  <div class="detail-info">
+    <div class="detail-name" id="detailName"></div>
+    <code class="detail-class" id="detailClass"></code>
+  </div>
+  <div class="detail-sizes" id="detailSizes"></div>
+  <div class="detail-actions">
+    <button class="detail-btn" id="copyClassName">
+      <span class="e-icons e-copy"></span> Class
+    </button>
+    <button class="detail-btn" id="copyHtml">
+      <span class="e-icons e-copy-code"></span> HTML
+    </button>
+    <button class="detail-btn primary" id="copyRazor">
+      <span class="e-icons e-copy"></span> Razor
+    </button>
+  </div>
+  <button class="detail-close" id="detailClose">
+    <span class="e-icons e-close"></span>
+  </button>
+</div>
+
+<!-- ── TOAST ── -->
+<div id="toast">
+  <span class="e-icons e-check toast-icon"></span>
+  <span id="toastMsg"></span>
+</div>
+
+<script>
+// ── ALL 608 ICONS ──────────────────────────────────────────────────────────
+const ALL_ICONS = ["e-above-average","e-activities","e-add-bookmark","e-add-chart-element","e-add-notes","e-adjustment","e-agenda-date-range","e-ai-chat","e-align-bottom","e-align-center","e-align-left","e-align-middle","e-align-right","e-align-top","e-all","e-all-bookmarks","e-all-notes","e-animals","e-annotation-edit","e-area","e-arrow-down","e-arrow-head","e-arrow-head-fill","e-arrow-left","e-arrow-right","e-arrow-right-up","e-arrow-tail","e-arrow-tail-fill","e-arrow-up","e-attachment","e-audio","e-auto-fit-all-column","e-auto-fit-column","e-auto-fit-content","e-auto-fit-window","e-bar-head","e-bar-tail","e-below-average","e-between","e-blockquote","e-bold","e-bookmark","e-border-all","e-border-bottom","e-border-box","e-border-center","e-border-custom","e-border-diagonal-1","e-border-diagonal-2","e-border-diagonal-down","e-border-diagonal-up","e-border-frame","e-border-inner","e-border-left","e-border-middle","e-border-none","e-border-none-1","e-border-outer","e-border-right","e-border-shadow-1","e-border-shadow-2","e-border-top","e-bottom-10","e-bottom-10-items","e-box","e-break","e-break-page","e-break-section","e-brightness","e-bring-forward","e-bring-to-center","e-bring-to-front","e-bring-to-view","e-building-block","e-bullet-1","e-bullet-2","e-bullet-3","e-bullet-4","e-bullet-5","e-bullet-6","e-bullet-7","e-button-field","e-calculate-sheet","e-calculated-member","e-calculation","e-callout","e-caption","e-caption-1","e-cell","e-cell-property","e-change-case","e-change-scale-ratio","e-changes-accept","e-changes-reject","e-changes-track","e-character-style","e-chart","e-chart-2d-100-percent-stacked-area","e-chart-2d-100-percent-stacked-bar","e-chart-2d-100-percent-stacked-column","e-chart-2d-100-percent-stacked-line","e-chart-2d-100-percent-stacked-line-marked","e-chart-2d-area","e-chart-2d-clustered-bar","e-chart-2d-clustered-column","e-chart-2d-line","e-chart-2d-line-marked","e-chart-2d-pie-2","e-chart-2d-stacked-area","e-chart-2d-stacked-bar","e-chart-2d-stacked-column","e-chart-2d-stacked-line","e-chart-2d-stacked-line-marked","e-chart-axes","e-chart-axes-primary-horizontal","e-chart-axes-primary-vertical","e-chart-axis-titles","e-chart-axis-titles-primary-horizontal","e-chart-axis-titles-primary-vertical","e-chart-data-labels","e-chart-data-labels-center","e-chart-data-labels-inside-base","e-chart-data-labels-inside-end","e-chart-data-labels-none","e-chart-data-labels-outside-end","e-chart-donut","e-chart-gridlines","e-chart-insert-bar","e-chart-insert-column","e-chart-insert-line","e-chart-insert-pie","e-chart-insert-x-y-scatter","e-chart-legend","e-chart-legend-bottom","e-chart-legend-left","e-chart-legend-none","e-chart-legend-right","e-chart-legend-top","e-chart-lines","e-chart-primary-major-horizontal","e-chart-primary-major-vertical","e-chart-primary-minor-horizontal","e-chart-primary-minor-vertical","e-chart-scatter","e-chart-switch-row-column","e-chart-title","e-chart-title-centered-overlay","e-chart-title-none","e-check","e-check-box","e-check-large","e-check-small","e-check-tick","e-checklist","e-chevron-down","e-chevron-down-double","e-chevron-down-fill","e-chevron-down-small","e-chevron-left","e-chevron-left-double","e-chevron-left-fill","e-chevron-left-small","e-chevron-right","e-chevron-right-double","e-chevron-right-fill","e-chevron-right-small","e-chevron-up","e-chevron-up-double","e-chevron-up-fill","e-chevron-up-small","e-circle","e-circle-add","e-circle-check","e-circle-close","e-circle-head","e-circle-head-fill","e-circle-info","e-circle-remove","e-circle-tail","e-circle-tail-fill","e-clear-form","e-clear-format","e-clear-rules","e-clock","e-close","e-close-comment","e-code-view","e-collapse-2","e-collapsible-heading-1","e-collapsible-heading-2","e-collapsible-heading-3","e-collapsible-heading-4","e-color-scales","e-columns","e-combo-box","e-comment-add","e-comment-reopen","e-comment-resolve","e-comment-show","e-conditional-formatting","e-conditional-formatting-large","e-content-control","e-continue-numbering","e-continuous-page-break","e-contrast","e-convert-all-note","e-copy","e-copy-code","e-critical-path","e-crop","e-cut","e-data-bars","e-data-validation","e-date-occurring","e-day","e-decrease-fontsize","e-decrease-indent","e-decrease-indent-rtl","e-delete-all-comments","e-delete-column","e-delete-notes","e-delete-row","e-description","e-dimension","e-display","e-double-check","e-download","e-drag-and-drop","e-drag-and-drop-indicator","e-drag-fill","e-drop-down","e-dropdown-list","e-duplicate","e-duplicate-cell","e-edit","e-edit-notes","e-elaborate","e-emoji","e-end-footnote","e-equalto","e-erase","e-error-treeview","e-even-page-break","e-exit-full-screen","e-expand","e-export","e-export-csv","e-export-excel","e-export-jpeg","e-export-pdf","e-export-pdf-1","e-export-png","e-export-svg","e-export-word-1","e-export-xls","e-extract-page","e-eye","e-eye-slash","e-fade","e-field-settings","e-file-document","e-file-format","e-file-new","e-filter","e-filter-active","e-filter-clear","e-filter-main","e-filtered","e-filtered-sort-ascending","e-filtered-sort-descending","e-filters","e-first-page","e-fit-100","e-fixed-column-width","e-flags","e-flip-horizontal","e-flip-vertical","e-folder","e-folder-open","e-font-color","e-font-name","e-font-size","e-food-and-drinks","e-footer","e-form-field","e-format-painter","e-forward-arrow","e-frame-1","e-frame-10","e-frame-11","e-frame-2","e-frame-3","e-frame-4","e-frame-5","e-frame-6","e-frame-7","e-frame-8","e-frame-9","e-frame-bevel","e-frame-custom","e-frame-hook","e-frame-inset","e-frame-line","e-frame-mat","e-frame-none","e-freeze-column","e-freeze-pane","e-freeze-row","e-full-screen","e-gantt-gripper","e-grain","e-grammar-check","e-grand-total","e-greater-than","e-grid-view","e-grip-vertical","e-group-1","e-group-2","e-group-icon","e-hand-gestures","e-header","e-heading-1","e-heading-2","e-heading-3","e-heading-4","e-hide-formula-bar","e-hide-gridlines","e-hide-headings","e-highlight","e-highlight-color","e-history","e-home","e-horizontal-line","e-hyperlink-copy","e-hyperlink-edit","e-hyperlink-open","e-hyperlink-remove","e-iconsets","e-image","e-import","e-import-1","e-import-word","e-increase-fontsize","e-increase-indent","e-increase-indent-rtl","e-insert-above","e-insert-below","e-insert-code","e-insert-left","e-insert-right","e-insert-sheet","e-intermediate-state","e-intermediate-state-2","e-italic","e-justify","e-kpi","e-landscape","e-last-page","e-launcher","e-layers","e-left-wrap","e-length","e-less-than","e-level-1","e-level-2","e-level-3","e-level-4","e-level-5","e-line","e-line-normal","e-line-small","e-line-spacing","e-line-very-small","e-link","e-link-remove","e-linked-style","e-list-ordered","e-list-ordered-rtl","e-list-unordered","e-list-unordered-rtl","e-location","e-lock","e-lower-case","e-magic-wand","e-margin","e-margin-custom","e-margin-default","e-margin-moderate","e-margin-narrow","e-margin-normal","e-margin-wide","e-mdx","e-menu","e-merge-cells","e-microphone","e-month","e-month-agenda","e-more-chevron","e-more-column","e-more-horizontal-1","e-more-scatter-charts","e-more-vertical-1","e-more-vertical-2","e-mouse-pointer","e-move","e-multiple-comment","e-multiple-comment-resolve","e-multiple-page","e-named-set","e-nature","e-next-comment","e-next-note","e-none","e-notes","e-number-formatting","e-objects","e-odd-page-break","e-opacity","e-open-link","e-order","e-organize-pdf","e-page-column","e-page-column-left","e-page-column-one","e-page-column-right","e-page-column-three","e-page-column-two","e-page-columns","e-page-numbering","e-page-orientation","e-page-setup","e-page-size","e-page-text-wrap","e-paint-bucket","e-pan","e-paragraph","e-password","e-paste","e-paste-match-destination","e-paste-style","e-paste-text-only","e-pause","e-pentagon","e-people","e-perimeter","e-pin","e-play","e-plus","e-preformat-code","e-previous-comment","e-previous-note","e-print","e-print-layout","e-properties-1","e-properties-2","e-protect-sheet","e-protect-workbook","e-radio-button","e-radius","e-reading-view","e-reapply","e-rectangle","e-recurrence-edit","e-redact","e-redaction","e-redo","e-refresh","e-rename","e-repeat","e-repeating-section","e-rephrase","e-replace","e-reply-arrow","e-reset","e-resize","e-resizer-1","e-resizer-horizontal","e-resizer-right","e-resizer-vertical","e-restart-at-1","e-right-wrap","e-saturation","e-save","e-save-as","e-search","e-select-all","e-selection","e-send","e-send-backward","e-send-to-back","e-settings","e-shapes","e-sharpness","e-shorten","e-show-hide-panel","e-show-side-panel","e-signature","e-size-a4","e-size-a5","e-size-custom","e-size-executive","e-size-legal","e-size-letter","e-smart-edit","e-smart-paste","e-sort-ascending","e-sort-ascending-2","e-sort-descending","e-sort-descending-2","e-sorting-1","e-sorting-2","e-sorting-3","e-spacing-after","e-spacing-before","e-spell-check","e-split-horizontal","e-split-vertical","e-square-head","e-square-head-fill","e-square-tail","e-square-tail-fill","e-squiggly","e-stamp","e-star-filled","e-stop-rectangle","e-strikethrough","e-stroke-width","e-style","e-sub-total","e-subscript","e-sum","e-superscript","e-swap-arrow","e-symbols","e-table","e-table-2","e-table-align-center","e-table-align-left","e-table-align-right","e-table-border-custom","e-table-cell","e-table-cell-none","e-table-delete","e-table-edit","e-table-header","e-table-insert-column","e-table-insert-row","e-table-merge","e-table-nested","e-table-of-content","e-table-overwrite-cells","e-table-update","e-text-alternative","e-text-annotation","e-text-edit","e-text-form","e-text-header","e-text-outline","e-text-redact","e-text-that-contains","e-text-wrap","e-thumbnail","e-thumbs-down","e-thumbs-down-fill","e-thumbs-up","e-thumbs-up-fill","e-time-zone","e-timeline-day","e-timeline-month","e-timeline-today","e-timeline-week","e-timeline-work-week","e-tint","e-top-10","e-top-bottom-rules","e-transform","e-transform-left","e-transform-right","e-translate","e-trash","e-travel-and-places","e-triangle","e-two-column","e-two-row","e-underline","e-undo","e-unfiltered","e-ungroup-1","e-ungroup-2","e-unlock","e-unpin","e-upload-1","e-upper-case","e-user","e-user-defined","e-vertical-align-bottom","e-vertical-align-center","e-vertical-align-top","e-video","e-view-side","e-volume","e-warning","e-web-layout","e-week","e-xml-mapping","e-zoom-in","e-zoom-out","e-zoom-to-fit"];
+
+// ── CATEGORIES ─────────────────────────────────────────────────────────────
+const CATEGORIES = [
+  { name: "All Icons",    color: "#7c6ff7", pattern: null },
+  { name: "Charts",       color: "#f472b6", pattern: /^e-chart/ },
+  { name: "Tables",       color: "#34d399", pattern: /^e-table/ },
+  { name: "Navigation",   color: "#60a5fa", pattern: /arrow|chevron|home|first|last|next|prev|page-num/ },
+  { name: "Borders",      color: "#fb923c", pattern: /^e-border/ },
+  { name: "Frames",       color: "#a78bfa", pattern: /^e-frame/ },
+  { name: "Export",       color: "#fbbf24", pattern: /^e-export/ },
+  { name: "Import",       color: "#6ee7b7", pattern: /^e-import/ },
+  { name: "Editing",      color: "#f87171", pattern: /edit|format|paint|erase|cut|copy|paste|undo|redo|style|bold|italic|underline|strike/ },
+  { name: "Filter/Sort",  color: "#c084fc", pattern: /filter|sort|sorting/ },
+  { name: "Text",         color: "#67e8f9", pattern: /text|font|para|indent|align|bullet|list/ },
+  { name: "Status",       color: "#4ade80", pattern: /check|tick|circle|warning|info|error|success|intermediate/ },
+  { name: "Page Layout",  color: "#fcd34d", pattern: /page|margin|size-|column|break|landscape|portrait|orientation/ },
+  { name: "Timeline",     color: "#a5b4fc", pattern: /^e-timeline/ },
+  { name: "View",         color: "#94a3b8", pattern: /zoom|fit|screen|view|resize|grid|reading|display/ },
+  { name: "Insert",       color: "#86efac", pattern: /^e-insert|^e-add/ },
+  { name: "Delete",       color: "#fca5a5", pattern: /delete|remove|trash|clear/ },
+  { name: "Freeze",       color: "#7dd3fc", pattern: /^e-freeze/ },
+  { name: "Image",        color: "#fdba74", pattern: /image|crop|brightness|contrast|tint|fade|grain|saturation|sharpness|flip|transform/ },
+  { name: "Comments",     color: "#c4b5fd", pattern: /comment|note|annotation/ },
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let query = '';
+let activeFilter = 'all';
+let activeCategory = null;
+let sortMode = 'az';
+let pageSize = 96;
+let currentPage = 1;
+let filtered = [...ALL_ICONS];
+let copiedCount = 0;
+let selectedIcon = null;
+
+// ── DOM REFS ───────────────────────────────────────────────────────────────
+const grid         = document.getElementById('iconGrid');
+const searchInput  = document.getElementById('mainSearch');
+const searchClear  = document.getElementById('searchClear');
+const searchKbd    = document.getElementById('searchKbd');
+const statShown    = document.getElementById('statShown');
+const statCopied   = document.getElementById('statCopied');
+const catListEl    = document.getElementById('catList');
+const loadMoreBtn  = document.getElementById('loadMoreBtn');
+const detailPanel  = document.getElementById('detailPanel');
+const detailIconEl = document.getElementById('detailIconEl');
+const detailName   = document.getElementById('detailName');
+const detailClass  = document.getElementById('detailClass');
+const detailSizes  = document.getElementById('detailSizes');
+const toastEl      = document.getElementById('toast');
+const toastMsg     = document.getElementById('toastMsg');
+
+// ── SEARCH ─────────────────────────────────────────────────────────────────
+searchInput.addEventListener('input', () => {
+  query = searchInput.value.trim().toLowerCase();
+  searchClear.classList.toggle('visible', query.length > 0);
+  searchKbd.style.display = query.length > 0 ? 'none' : '';
+  currentPage = 1;
+  buildFiltered();
+  render();
+});
+
+searchClear.addEventListener('click', () => {
+  searchInput.value = '';
+  query = '';
+  searchClear.classList.remove('visible');
+  searchKbd.style.display = '';
+  currentPage = 1;
+  buildFiltered();
+  render();
+  searchInput.focus();
+});
+
+// Keyboard shortcut ⌘K / Ctrl+K
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+  if (e.key === 'Escape') {
+    if (detailPanel.classList.contains('open')) {
+      closeDetail();
+    } else if (query) {
+      searchClear.click();
+    }
+  }
+});
+
+// ── FILTER CHIPS ───────────────────────────────────────────────────────────
+document.getElementById('filterChips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  activeFilter = chip.dataset.filter;
+  activeCategory = null;
+  // deactivate sidebar
+  document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+  document.querySelector('.cat-item[data-idx="0"]')?.classList.add('active');
+  currentPage = 1;
+  buildFiltered();
+  render();
+});
+
+// ── SORT ───────────────────────────────────────────────────────────────────
+document.getElementById('sortSelect').addEventListener('change', e => {
+  sortMode = e.target.value;
+  currentPage = 1;
+  buildFiltered();
+  render();
+});
+
+// ── SIZE ───────────────────────────────────────────────────────────────────
+document.querySelectorAll('.size-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    grid.classList.remove('size-sm', 'size-md', 'size-lg');
+    grid.classList.add('size-' + btn.dataset.size);
+  });
+});
+
+// ── LOAD MORE ──────────────────────────────────────────────────────────────
+loadMoreBtn.addEventListener('click', () => {
+  currentPage++;
+  renderPage(false);
+  updateLoadMore();
+});
+
+// ── BUILD FILTERED LIST ────────────────────────────────────────────────────
+function buildFiltered() {
+  let list = [...ALL_ICONS];
+
+  // text search
+  if (query) {
+    const terms = query.split(/\s+/);
+    list = list.filter(ic => {
+      const name = ic.slice(2); // strip "e-"
+      return terms.every(t => name.includes(t));
+    });
+  }
+
+  // chip filter
+  if (activeFilter && activeFilter !== 'all') {
+    const parts = activeFilter.split('|');
+    list = list.filter(ic => parts.some(p => {
+      if (p.startsWith('^')) return ic.startsWith(p.slice(1));
+      return ic.includes(p);
+    }));
+  }
+
+  // category sidebar
+  if (activeCategory !== null && activeCategory !== 0) {
+    const cat = CATEGORIES[activeCategory];
+    if (cat.pattern) list = list.filter(ic => cat.pattern.test(ic));
+  }
+
+  // sort
+  if (sortMode === 'za') list.sort((a,b) => b.localeCompare(a));
+  else if (sortMode === 'len') list.sort((a,b) => a.length - b.length || a.localeCompare(b));
+  else list.sort((a,b) => a.localeCompare(b));
+
+  filtered = list;
+  statShown.textContent = filtered.length;
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function render() {
+  grid.innerHTML = '';
+  renderPage(true);
+  updateLoadMore();
+}
+
+function renderPage(fresh) {
+  const start = fresh ? 0 : (currentPage - 1) * pageSize;
+  const end   = fresh ? currentPage * pageSize : currentPage * pageSize;
+  const slice = filtered.slice(start, end);
+
+  if (fresh && filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state">
+        <span class="e-icons e-search empty-icon"></span>
+        <div class="empty-title">No icons found</div>
+        <div class="empty-sub">
+          No icons match "<strong style="color:var(--accent2)">${escHtml(searchInput.value)}</strong>"<br>
+          Try a shorter keyword or browse categories
+        </div>
+      </div>`;
+    return;
+  }
+
+  slice.forEach((icon, i) => {
+    const card = document.createElement('div');
+    card.className = 'icon-card';
+    card.style.animationDelay = Math.min(i * 8, 200) + 'ms';
+    card.innerHTML = `
+      <span class="e-icons ${icon}"></span>
+      <span class="icon-name">${icon.slice(2)}</span>
+      <span class="copy-tag">✓ copied</span>`;
+    card.addEventListener('click', () => openDetail(icon));
+    card.addEventListener('dblclick', () => quickCopy(icon, card));
+    grid.appendChild(card);
+  });
+}
+
+function updateLoadMore() {
+  const shown = Math.min(currentPage * pageSize, filtered.length);
+  const remaining = filtered.length - shown;
+  loadMoreBtn.textContent = remaining > 0
+    ? `Load ${Math.min(remaining, pageSize)} more (${remaining} remaining)`
+    : 'All icons shown';
+  loadMoreBtn.disabled = remaining <= 0;
+  document.querySelector('.load-more-wrap').style.display = filtered.length <= pageSize ? 'none' : 'flex';
+}
+
+// ── CATEGORIES SIDEBAR ─────────────────────────────────────────────────────
+function buildCatSidebar() {
+  const COLORS = ["#7c6ff7","#f472b6","#34d399","#60a5fa","#fb923c","#a78bfa","#fbbf24","#6ee7b7","#f87171","#c084fc","#67e8f9","#4ade80","#fcd34d","#a5b4fc","#94a3b8","#86efac","#fca5a5","#7dd3fc","#fdba74","#c4b5fd","#f9a8d4"];
+  catListEl.innerHTML = '';
+  CATEGORIES.forEach((cat, idx) => {
+    const count = cat.pattern
+      ? ALL_ICONS.filter(ic => cat.pattern.test(ic)).length
+      : ALL_ICONS.length;
+    const item = document.createElement('div');
+    item.className = 'cat-item' + (idx === 0 ? ' active' : '');
+    item.dataset.idx = idx;
+    item.innerHTML = `
+      <div class="cat-dot" style="background:${cat.color}"></div>
+      <span class="cat-name">${cat.name}</span>
+      <span class="cat-count">${count}</span>`;
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+      item.classList.add('active');
+      activeCategory = idx;
+      // reset chips
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      document.querySelector('.chip[data-filter="all"]').classList.add('active');
+      activeFilter = 'all';
+      currentPage = 1;
+      buildFiltered();
+      render();
+    });
+    catListEl.appendChild(item);
+  });
+}
+
+document.getElementById('catClear').addEventListener('click', () => {
+  activeCategory = 0;
+  document.querySelectorAll('.cat-item').forEach(c => c.classList.remove('active'));
+  document.querySelector('.cat-item[data-idx="0"]').classList.add('active');
+  currentPage = 1;
+  buildFiltered();
+  render();
+});
+
+// ── DETAIL PANEL ───────────────────────────────────────────────────────────
+function openDetail(icon) {
+  selectedIcon = icon;
+  detailIconEl.className = 'e-icons ' + icon;
+  detailName.textContent = icon;
+  detailClass.textContent = `e-icons ${icon}`;
+
+  detailSizes.innerHTML = [8,16,24,32].map(sz => `
+    <div class="sz-item">
+      <span class="e-icons ${icon}" style="font-size:${sz}px"></span>
+      <span class="sz-label">${sz}px</span>
+    </div>`).join('');
+
+  detailPanel.classList.add('open');
+}
+
+function closeDetail() {
+  detailPanel.classList.remove('open');
+  selectedIcon = null;
+}
+
+document.getElementById('detailClose').addEventListener('click', closeDetail);
+
+document.getElementById('copyClassName').addEventListener('click', () => {
+  if (!selectedIcon) return;
+  copyText(`e-icons ${selectedIcon}`, 'Class name copied!');
+});
+
+document.getElementById('copyHtml').addEventListener('click', () => {
+  if (!selectedIcon) return;
+  copyText(`<span class="e-icons ${selectedIcon}"></span>`, 'HTML snippet copied!');
+});
+
+document.getElementById('copyRazor').addEventListener('click', () => {
+  if (!selectedIcon) return;
+  copyText(`"${selectedIcon}"`, 'Razor string copied!');
+});
+
+// ── COPY HELPERS ───────────────────────────────────────────────────────────
+function quickCopy(icon, card) {
+  copyText(`<span class="e-icons ${icon}"></span>`, 'HTML copied!');
+  card.classList.add('copied');
+  setTimeout(() => card.classList.remove('copied'), 1200);
+}
+
+let toastTimer;
+function copyText(text, msg) {
+  navigator.clipboard.writeText(text).then(() => {
+    toastMsg.textContent = msg;
+    toastEl.classList.add('show');
+    copiedCount++;
+    statCopied.textContent = copiedCount;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2200);
+  });
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+buildCatSidebar();
+buildFiltered();
+render();
+</script>
+</body>
+</html>
